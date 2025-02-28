@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adif-parser-service
+template:
+  spec:
+    containers:
+      - name: adif-parser-service
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        ports:
+          - containerPort: 8000
+        resources: {{ toYaml .Values.resources | nindent 10 }}
