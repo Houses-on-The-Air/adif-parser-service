@@ -12,17 +12,14 @@ jobs:
 
         steps:
             - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
+            - name: Generate Python SBOM
+              uses: CycloneDX/gh-python-generate-sbom@v2
               with:
-                node-version: '16'
-            - run: npm install
-            - name: Create SBOM with CycloneDX
-              uses: CycloneDX/gh-node-module-generatebom@v1
-              with:
-                output: ./bom.xml
-
+                input: ./requirements.txt
+                output: ./bom.json
+                format: json
             - name: Upload SBOM artifact
               uses: actions/upload-artifact@v4
               with:
                 name: sbom
-                path: bom.xml
+                path: bom.json
