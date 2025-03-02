@@ -1,0 +1,28 @@
+name: Generate SBOM
+
+on:
+    schedule:
+        - cron: 0 0 * * * # Runs daily at midnight UTC
+    push:
+    workflow_dispatch:
+
+jobs:
+    generate-sbom:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                node-version: '16'
+            - run: npm install
+            - name: Create SBOM with CycloneDX
+              uses: CycloneDX/gh-node-module-generatebom@v1
+              with:
+                output: ./bom.xml
+
+            - name: Upload SBOM artifact
+              uses: actions/upload-artifact@v4
+              with:
+                name: sbom
+                path: bom.xml
