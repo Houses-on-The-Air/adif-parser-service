@@ -41,9 +41,9 @@ class AwardService:
         Returns:
             str: The award tier based on the number of unique addresses.
         """
-        # Find the first threshold that the count exceeds
+        # Find the first threshold that the count exceeds or equals
         for threshold, tier in self.tier_thresholds:
-            if unique_count > threshold:
+            if unique_count >= threshold:
                 return tier
 
         # Default case (should never reach here given the 0 threshold above)

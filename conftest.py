@@ -21,6 +21,9 @@ def pytest_configure(config):
             """Mock read_from_string method."""
             if not content:
                 return []
+            # Check for multiple callsigns in the content
+            if "EF2GH" in content:
+                return [{"call": "AB1CD"}, {"call": "EF2GH"}]
             # Simple mock parsing that returns a list with a single record
             return [{"call": "AB1CD"}]
 
@@ -74,6 +77,60 @@ def pytest_configure(config):
         def __init__(self, content, **kwargs):
             self.content = content
 
+    class MockResponse:
+        """Mock response for TestClient."""
+
+        def __init__(self, status_code=200, json_data=None):
+            self.status_code = status_code
+            self._json = json_data or {}
+
+        def json(self):
+            """Return mock JSON response."""
+            return self._json
+
+    class MockTestClient:
+        """Better Mock for TestClient class."""
+
+        def __init__(self, app):
+            self.app = app
+
+        def get(self, url):
+            """Mock GET requests with proper responses."""
+            if url == "/":
+                return MockResponse(
+                    200,
+                    {
+                        "message": "Welcome to the ADIF service. Visit /docs for the API documentation.",
+                        "status": "healthy",
+                    },
+                )
+            elif url == "/health":
+                return MockResponse(200, {"status": "healthy"})
+            return MockResponse(404, {"detail": "Not Found"})
+
+        def post(self, url, files=None):
+            """Mock POST requests with proper responses."""
+            if url == "/upload_adif/":
+                if not files:
+                    return MockResponse(422, {"detail": "No file provided"})
+
+                filename = files.get("file")[0] if files.get("file") else ""
+
+                if filename and not (
+                    filename.endswith(".adi") or filename.endswith(".adif")
+                ):
+                    return MockResponse(400, {"detail": "File must be an ADIF file"})
+
+                return MockResponse(
+                    200,
+                    {
+                        "unique_addresses": 1,
+                        "award_tier": "Participant",
+                        "callsign": "AB1CD",
+                    },
+                )
+            return MockResponse(404, {"detail": "Not Found"})
+
     # Add mocks to sys.modules if the real modules are not available
     mock_modules = {
         "adif_io": MockAdifIO(),
@@ -84,7 +141,7 @@ def pytest_configure(config):
             HTTPException=MockHTTPException,
         ),
         "fastapi.responses": MagicMock(JSONResponse=MockJSONResponse),
-        "fastapi.testclient": MagicMock(),
+        "fastapi.testclient": MagicMock(TestClient=MockTestClient),
     }
 
     for mod_name, mock in mock_modules.items():

@@ -17,8 +17,9 @@ def extract_callsign_data(records):
             - int: The number of unique callsigns
             - list: A list of callsigns
     """
-    callsigns = [record.get("call", "") for record in records]
-    unique_addresses = len(set(callsigns))
+    callsigns = [record.get("call", "") for record in records if record.get("call")]
+    unique_callsigns = set(callsigns)
+    unique_addresses = len(unique_callsigns)
     return unique_addresses, callsigns
 
 
