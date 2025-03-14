@@ -29,7 +29,7 @@ except ImportError:
     class MockException(Exception):
         """Base exception class for mock exceptions."""
 
-        pass
+        # No pass statement needed here
 
     class MockHTTPException(MockException):
         """Mock exception class for HTTPException."""
