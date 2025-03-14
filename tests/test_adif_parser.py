@@ -6,6 +6,7 @@ including parsing empty ADIF files, valid ADIF files, and handling of duplicate 
 """
 
 import unittest
+
 from adif_parser import parse_adif
 
 

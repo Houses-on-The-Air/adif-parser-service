@@ -6,7 +6,6 @@ that might not be available during testing.
 """
 
 import sys
-import pytest
 from unittest.mock import MagicMock
 
 

@@ -7,7 +7,6 @@ endpoints, including the root endpoint, health check endpoint, and the ADIF file
 
 from io import BytesIO
 import unittest
-import sys
 
 # Add try/except block for TestClient import
 try:
@@ -62,7 +61,8 @@ except ImportError:
             return MockResponse()
 
 
-from main import app
+# Import app from main at the module level
+from main import app as fastapi_app
 
 
 class TestEndpoints(unittest.TestCase):
@@ -80,7 +80,7 @@ class TestEndpoints(unittest.TestCase):
         This method is called before each test to initialize the TestClient
         instance, which is used to simulate requests to the FastAPI application.
         """
-        self.client = TestClient(app)
+        self.client = TestClient(fastapi_app)
 
     def test_read_root(self):
         """

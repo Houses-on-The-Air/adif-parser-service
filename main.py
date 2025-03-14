@@ -26,10 +26,24 @@ except ImportError:
         def post(self, *args, **kwargs):
             return self
 
-    FastAPI = File = UploadFile = HTTPException = MockClass
+    class MockException(Exception):
+        """Base exception class for mock exceptions."""
+
+        pass
+
+    class MockHTTPException(MockException):
+        """Mock exception class for HTTPException."""
+
+        def __init__(self, status_code=400, detail="Error"):
+            self.status_code = status_code
+            self.detail = detail
+            super().__init__(f"{status_code}: {detail}")
+
+    FastAPI = File = UploadFile = MockClass
+    HTTPException = MockHTTPException
     JSONResponse = MockClass
 
-from adif_parser import parse_adif
+from adif_parser import parse_adif  # isort: skip
 
 app = FastAPI(
     title="ADIF Parser Service",
