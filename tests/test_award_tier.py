@@ -6,6 +6,7 @@ based on the number of unique addresses in an ADIF file.
 """
 
 import unittest
+
 from award_tier import determine_award_tier
 
 

@@ -7,7 +7,7 @@ ADIF files, checking service health, and displaying welcome information.
 """
 
 try:
-    from fastapi import FastAPI, File, UploadFile, HTTPException, Depends
+    from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
     from fastapi.responses import JSONResponse
 except ImportError:
     # Mock for testing when fastapi is not available

@@ -6,8 +6,9 @@ including the determination of award tiers based on unique address counts.
 """
 
 import unittest
-from services.award_service import AwardService
+
 from models.award_tier import AwardTier
+from services.award_service import AwardService
 
 
 class TestAwardService(unittest.TestCase):
