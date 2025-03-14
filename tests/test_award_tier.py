@@ -1,7 +1,21 @@
+"""
+Unit tests for the award tier determination module.
+
+This module contains tests that verify the correct determination of award tiers
+based on the number of unique addresses in an ADIF file.
+"""
 import unittest
 from award_tier import determine_award_tier
 
+
 class TestAwardTier(unittest.TestCase):
+    """
+    Test cases for the award tier determination function.
+
+    These tests verify that the determine_award_tier function returns the correct
+    tier for various unique address counts, covering all possible tiers.
+    """
+
     def test_participant_tier(self):
         """Test that counts below 100 return 'Participant'."""
         self.assertEqual(determine_award_tier(0), "Participant")

@@ -1,3 +1,10 @@
+"""
+ADIF Parser Service - Main Application
+
+This module defines a FastAPI application for parsing ADIF files and extracting
+callsign data. The application provides endpoints for uploading and processing
+ADIF files, checking service health, and displaying welcome information.
+"""
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 
@@ -9,6 +16,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
+
 @app.get("/")
 def read_root():
     """
@@ -17,7 +25,8 @@ def read_root():
     Returns:
         dict: A dictionary containing a welcome message and the service status.
     """
-    return {"message": "Welcome to the ADIF service. Visit /docs for the API documentation.", "status": "healthy"}
+    return {"message": "Welcome to the ADIF service. Visit /docs for the API documentation.",
+            "status": "healthy"}
 
 
 @app.get("/health")
@@ -56,11 +65,17 @@ async def upload_adif(file: UploadFile = File(...)):
         try:
             file_content = content.decode("utf-8")
         except UnicodeDecodeError as exc:
-            raise HTTPException(status_code=400, detail="File encoding is not supported. Please provide a UTF-8 encoded file") from exc
+            raise HTTPException(
+                status_code=400,
+                detail="File encoding is not supported. Please provide a UTF-8 encoded file"
+            ) from exc
 
         result = parse_adif(file_content)
         return JSONResponse(content=result)
     except HTTPException:
         raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"An error occurred while processing the file: {str(e)}") from e
+    except Exception as exc:
+        raise HTTPException(
+            status_code=500,
+            detail=f"An error occurred while processing the file: {str(exc)}"
+        ) from exc

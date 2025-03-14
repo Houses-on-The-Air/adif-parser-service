@@ -1,5 +1,12 @@
+"""
+Unit tests for the ADIF parser module.
+
+This module contains test cases that verify the functionality of the ADIF parser,
+including parsing empty ADIF files, valid ADIF files, and handling of duplicate callsigns.
+"""
 import unittest
 from adif_parser import parse_adif
+
 
 class TestAdifParser(unittest.TestCase):
     """
@@ -7,20 +14,23 @@ class TestAdifParser(unittest.TestCase):
 
     This test suite includes the following tests:
     - `test_parse_empty_adif`: Verifies that parsing an empty ADIF file returns the expected default values.
-    - `test_parse_valid_adif`: Verifies that parsing a valid ADIF file returns the correct number of unique addresses and the first callsign.
+    - `test_parse_valid_adif`: Verifies that parsing a valid ADIF file returns the correct number of unique
+      addresses and the first callsign.
     - `test_duplicate_callsigns`: Ensures that duplicate callsigns in the ADIF file are counted only once.
     """
+
     def test_parse_empty_adif(self):
         """
         Test the parse_adif function with an empty ADIF string.
+
         This test ensures that the parse_adif function correctly handles an empty
         ADIF string by returning default values for the parsed fields.
+
         Assertions:
             - The 'unique_addresses' field should be 0.
             - The 'award_tier' field should be "Participant".
             - The 'callsign' field should be "Unknown".
         """
-
         result = parse_adif("")
         self.assertEqual(result["unique_addresses"], 0)
         self.assertEqual(result["award_tier"], "Participant")
@@ -29,13 +39,14 @@ class TestAdifParser(unittest.TestCase):
     def test_parse_valid_adif(self):
         """
         Test the parse_adif function with valid ADIF content.
+
         This test verifies that the parse_adif function correctly parses a valid ADIF string
         and returns the expected results. The ADIF content includes two QSO records with
         different callsigns, bands, modes, dates, and times.
+
         The test checks the following:
             - The number of unique addresses parsed from the ADIF content is 2.
             - The callsign of the first QSO record is "AB1CD".
-        The ADIF content used in this test is:
         """
         adif_content = """
         <adif_ver:5>3.1.0
@@ -51,14 +62,11 @@ class TestAdifParser(unittest.TestCase):
     def test_duplicate_callsigns(self):
         """
         Test case for verifying the handling of duplicate callsigns in ADIF content.
+
         This test checks if the `parse_adif` function correctly identifies and counts unique callsigns
         when duplicate callsigns are present in the ADIF data. The ADIF content provided contains two
-        entries with the same callsign "AB1CD" but different timestamps. The expected result is that
-        the function should count only one unique callsign.
-        Steps:
-            1. Define ADIF content with duplicate callsigns.
-            2. Parse the ADIF content using the `parse_adif` function.
-            3. Assert that the number of unique callsigns is 1.
+        entries with the same callsign "AB1CD" but different timestamps.
+
         Expected Result:
             The `parse_adif` function should return a result indicating that there is only one unique callsign.
         """
