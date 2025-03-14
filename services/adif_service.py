@@ -5,6 +5,23 @@ This module provides the service layer for processing ADIF files.
 """
 
 
+def extract_callsign_data(records):
+    """
+    Extract callsign data from ADIF records.
+
+    Args:
+        records (list): A list of ADIF record dictionaries.
+
+    Returns:
+        tuple: A tuple containing:
+            - int: The number of unique callsigns
+            - list: A list of callsigns
+    """
+    callsigns = [record.get("call", "") for record in records]
+    unique_addresses = len(set(callsigns))
+    return unique_addresses, callsigns
+
+
 class AdifService:
     """
     Service for processing ADIF files.
@@ -49,8 +66,7 @@ class AdifService:
             dict: A dictionary containing information about the ADIF data.
         """
         records = self.adif_repository.read_from_string(file_content)
-        callsigns = [record.get("call", "") for record in records]
-        unique_addresses = len(set(callsigns))
+        unique_addresses, callsigns = extract_callsign_data(records)
         award_tier = self.award_service.determine_award_tier(unique_addresses)
         callsign = callsigns[0] if callsigns else "Unknown"
 

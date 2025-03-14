@@ -4,8 +4,8 @@ Dependencies module for the ADIF Parser Service.
 This module provides dependency injection functions for FastAPI.
 """
 
-from services.adif_service import AdifService
 from repositories.adif_repository import AdifIoRepository
+from services.adif_service import AdifService
 from services.award_service import AwardService
 
 

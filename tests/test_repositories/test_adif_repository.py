@@ -6,7 +6,7 @@ including the parsing of ADIF data from strings.
 """
 
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 from repositories.adif_repository import AdifIoRepository
 

@@ -13,6 +13,7 @@ except ImportError:
     adif_io = None
 
 from award_tier import determine_award_tier
+from services.adif_service import extract_callsign_data
 
 
 def parse_adif(file_content):
@@ -38,8 +39,10 @@ def parse_adif(file_content):
         }
 
     records = adif_io.read_from_string(file_content)
-    callsigns = [record.get("call", "") for record in records]
-    unique_addresses = len(set(callsigns))
+
+    # Extract data using the shared utility function
+    unique_addresses, callsigns = extract_callsign_data(records)
+
     award_tier = determine_award_tier(unique_addresses)
     callsign = callsigns[0] if callsigns else "Unknown"
 
