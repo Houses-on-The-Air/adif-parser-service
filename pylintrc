@@ -1,0 +1,43 @@
+[MASTER]
+ignore=CVS
+ignore-patterns=
+persistent=yes
+load-plugins=
+
+[MESSAGES CONTROL]
+disable=
+    missing-module-docstring,
+    missing-class-docstring,
+    missing-function-docstring,
+    invalid-name,
+    trailing-whitespace,
+    line-too-long,
+    bad-continuation,
+    bad-whitespace,
+    unused-argument,
+    too-few-public-methods,
+    too-many-arguments,
+    too-many-locals,
+    bare-except,
+    pointless-string-statement,
+    unspecified-encoding,
+    too-many-return-statements
+
+[REPORTS]
+output-format=text
+reports=yes
+evaluation=10.0 - ((float(5 * error + warning + refactor + convention) / statement) * 10)
+
+[BASIC]
+good-names=i,j,k,ex,Run,_,id,app
+
+[FORMAT]
+max-line-length=100
+
+[DESIGN]
+max-args=10
+max-attributes=12
+
+[IMPORTS]
+# Configure known third party modules
+known-third-party=fastapi,adif_io,pytest,uvicorn,httpx

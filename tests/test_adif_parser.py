@@ -13,10 +13,9 @@ class TestAdifParser(unittest.TestCase):
     Unit tests for the ADIF parser.
 
     This test suite includes the following tests:
-    - `test_parse_empty_adif`: Verifies that parsing an empty ADIF file returns the expected default values.
-    - `test_parse_valid_adif`: Verifies that parsing a valid ADIF file returns the correct number of unique
-      addresses and the first callsign.
-    - `test_duplicate_callsigns`: Ensures that duplicate callsigns in the ADIF file are counted only once.
+    - `test_parse_empty_adif`: Verifies that parsing an empty ADIF file returns expected defaults.
+    - `test_parse_valid_adif`: Verifies that parsing a valid ADIF file returns the correct data.
+    - `test_duplicate_callsigns`: Ensures that duplicate callsigns are counted only once.
     """
 
     def test_parse_empty_adif(self):
@@ -41,10 +40,9 @@ class TestAdifParser(unittest.TestCase):
         Test the parse_adif function with valid ADIF content.
 
         This test verifies that the parse_adif function correctly parses a valid ADIF string
-        and returns the expected results. The ADIF content includes two QSO records with
-        different callsigns, bands, modes, dates, and times.
+        and returns the expected results.
 
-        The test checks the following:
+        The test checks:
             - The number of unique addresses parsed from the ADIF content is 2.
             - The callsign of the first QSO record is "AB1CD".
         """
@@ -63,12 +61,10 @@ class TestAdifParser(unittest.TestCase):
         """
         Test case for verifying the handling of duplicate callsigns in ADIF content.
 
-        This test checks if the `parse_adif` function correctly identifies and counts unique callsigns
-        when duplicate callsigns are present in the ADIF data. The ADIF content provided contains two
-        entries with the same callsign "AB1CD" but different timestamps.
+        This test checks if the `parse_adif` function correctly identifies unique callsigns
+        when duplicates are present in the ADIF data.
 
-        Expected Result:
-            The `parse_adif` function should return a result indicating that there is only one unique callsign.
+        Expected Result: Only one unique callsign is counted.
         """
         adif_content = """
         <adif_ver:5>3.1.0
