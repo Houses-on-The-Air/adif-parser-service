@@ -22,6 +22,27 @@ def extract_callsign_data(records):
     return unique_addresses, callsigns
 
 
+def format_adif_result(unique_addresses, award_tier, callsigns):
+    """
+    Format the ADIF parsing result as a standardized dictionary.
+
+    Args:
+        unique_addresses (int): Number of unique callsigns
+        award_tier (str): Determined award tier
+        callsigns (list): List of callsigns found
+
+    Returns:
+        dict: A dictionary containing the ADIF analysis result
+    """
+    callsign = callsigns[0] if callsigns else "Unknown"
+
+    return {
+        "unique_addresses": unique_addresses,
+        "award_tier": award_tier,
+        "callsign": callsign,
+    }
+
+
 class AdifService:
     """
     Service for processing ADIF files.
@@ -68,10 +89,5 @@ class AdifService:
         records = self.adif_repository.read_from_string(file_content)
         unique_addresses, callsigns = extract_callsign_data(records)
         award_tier = self.award_service.determine_award_tier(unique_addresses)
-        callsign = callsigns[0] if callsigns else "Unknown"
 
-        return {
-            "unique_addresses": unique_addresses,
-            "award_tier": award_tier,
-            "callsign": callsign,
-        }
+        return format_adif_result(unique_addresses, award_tier, callsigns)
