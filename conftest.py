@@ -104,7 +104,7 @@ def pytest_configure(config):
                         "status": "healthy",
                     },
                 )
-            elif url == "/health":
+            if url == "/health":
                 return MockResponse(200, {"status": "healthy"})
             return MockResponse(404, {"detail": "Not Found"})
 
