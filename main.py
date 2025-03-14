@@ -7,7 +7,7 @@ ADIF files, checking service health, and displaying welcome information.
 """
 
 try:
-    from fastapi import FastAPI, File, UploadFile, HTTPException
+    from fastapi import FastAPI, File, UploadFile, HTTPException, Depends
     from fastapi.responses import JSONResponse
 except ImportError:
     # Mock for testing when fastapi is not available
@@ -41,8 +41,9 @@ except ImportError:
     HTTPException = MockHTTPException
     JSONResponse = MockClass
 
-# isort: split
-from adif_parser import parse_adif
+# Third party imports
+from dependencies import get_adif_service
+from services.adif_service import AdifService
 
 app = FastAPI(
     title="ADIF Parser Service",
@@ -77,12 +78,15 @@ def health_check():
 
 
 @app.post("/upload_adif/")
-async def upload_adif(file: UploadFile = File(...)):
+async def upload_adif(
+    file: UploadFile = File(...), adif_service: AdifService = Depends(get_adif_service)
+):
     """
     Asynchronously uploads and processes an ADIF (Amateur Data Interchange Format) file.
 
     Args:
         file (UploadFile): The ADIF file to be uploaded.
+        adif_service (AdifService): The service for processing ADIF files.
 
     Returns:
         dict: The result of parsing the ADIF file content.
@@ -94,7 +98,7 @@ async def upload_adif(file: UploadFile = File(...)):
         if not file:
             raise HTTPException(status_code=400, detail="No file provided")
 
-        if not file.filename.lower().endswith((".adi", ".adif")):
+        if not adif_service.is_valid_adif_file(file.filename):
             raise HTTPException(
                 status_code=400, detail="File must be an ADIF file (.adi or .adif)"
             )
@@ -108,7 +112,7 @@ async def upload_adif(file: UploadFile = File(...)):
                 detail="File encoding is not supported. Please provide a UTF-8 encoded file",
             ) from exc
 
-        result = parse_adif(file_content)
+        result = adif_service.process_adif_content(file_content)
         return JSONResponse(content=result)
     except HTTPException:
         raise
