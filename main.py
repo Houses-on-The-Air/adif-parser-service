@@ -29,8 +29,6 @@ except ImportError:
     class MockException(Exception):
         """Base exception class for mock exceptions."""
 
-        # No pass statement needed here
-
     class MockHTTPException(MockException):
         """Mock exception class for HTTPException."""
 
@@ -43,7 +41,8 @@ except ImportError:
     HTTPException = MockHTTPException
     JSONResponse = MockClass
 
-from adif_parser import parse_adif  # isort: skip
+# isort: split
+from adif_parser import parse_adif
 
 app = FastAPI(
     title="ADIF Parser Service",

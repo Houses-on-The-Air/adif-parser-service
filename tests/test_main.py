@@ -5,8 +5,8 @@ This module contains tests that verify the functionality of the FastAPI applicat
 endpoints, including the root endpoint, health check endpoint, and the ADIF file upload endpoint.
 """
 
-from io import BytesIO
 import unittest
+from io import BytesIO
 
 # Add try/except block for TestClient import
 try:
