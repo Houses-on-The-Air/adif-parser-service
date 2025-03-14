@@ -27,7 +27,7 @@ def determine_award_tier(unique_count):
         (1000, "Semi-Detached House"),
         (500, "Terraced House"),
         (100, "Bedsit"),
-        (0, "Participant")
+        (0, "Participant"),
     ]
 
     # Find the first threshold that the count exceeds

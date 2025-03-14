@@ -4,6 +4,7 @@ Unit tests for the FastAPI endpoints.
 This module contains tests that verify the functionality of the FastAPI application's
 endpoints, including the root endpoint, health check endpoint, and the ADIF file upload endpoint.
 """
+
 from io import BytesIO
 import unittest
 import sys
@@ -15,12 +16,16 @@ except ImportError:
     # Mock TestClient if FastAPI is not available
     class TestClient:
         """Mock TestClient for running tests when FastAPI is not available."""
+
         def __init__(self, app):
             self.app = app
+
         def get(self, url):
             """Mock GET request."""
+
             class MockResponse:
                 """Mock response object."""
+
                 def __init__(self):
                     self.status_code = 200
                     self._json = {"status": "healthy"}
@@ -28,14 +33,19 @@ except ImportError:
                         self._json["message"] = (
                             "Welcome to the ADIF service. Visit /docs for the API documentation."
                         )
+
                 def json(self):
                     """Return mock JSON response."""
                     return self._json
+
             return MockResponse()
+
         def post(self, url, files=None):
             """Mock POST request."""
+
             class MockResponse:
                 """Mock response object."""
+
                 def __init__(self):
                     self.status_code = 200
                     self._json = {"unique_addresses": 1, "callsign": "AB1CD"}
@@ -44,10 +54,13 @@ except ImportError:
                         self.status_code = 422
                     if files and files.get("file")[0].endswith(".txt"):
                         self.status_code = 400
+
                 def json(self):
                     """Return mock JSON response."""
                     return self._json
+
             return MockResponse()
+
 
 from main import app
 
@@ -82,7 +95,7 @@ class TestEndpoints(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.json()["message"],
-            "Welcome to the ADIF service. Visit /docs for the API documentation."
+            "Welcome to the ADIF service. Visit /docs for the API documentation.",
         )
         self.assertEqual(response.json()["status"], "healthy")
 
@@ -119,7 +132,7 @@ class TestEndpoints(unittest.TestCase):
         file_content = b"This is not an ADIF file"
         response = self.client.post(
             "/upload_adif/",
-            files={"file": ("test.txt", BytesIO(file_content), "text/plain")}
+            files={"file": ("test.txt", BytesIO(file_content), "text/plain")},
         )
         self.assertEqual(response.status_code, 400)
 
@@ -139,7 +152,7 @@ class TestEndpoints(unittest.TestCase):
         """
         response = self.client.post(
             "/upload_adif/",
-            files={"file": ("test.adif", BytesIO(adif_content), "text/plain")}
+            files={"file": ("test.adif", BytesIO(adif_content), "text/plain")},
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["unique_addresses"], 1)

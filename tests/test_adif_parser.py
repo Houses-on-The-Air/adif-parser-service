@@ -4,6 +4,7 @@ Unit tests for the ADIF parser module.
 This module contains test cases that verify the functionality of the ADIF parser,
 including parsing empty ADIF files, valid ADIF files, and handling of duplicate callsigns.
 """
+
 import unittest
 from adif_parser import parse_adif
 

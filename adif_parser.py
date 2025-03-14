@@ -5,6 +5,7 @@ This module provides functionality for parsing ADIF (Amateur Data Interchange Fo
 It extracts callsign information and determines award tiers based on the number of unique
 callsigns found in the file.
 """
+
 try:
     import adif_io
 except ImportError:
@@ -30,7 +31,11 @@ def parse_adif(file_content):
     """
     if adif_io is None:
         # Mock behavior if adif_io is not available
-        return {"unique_addresses": 0, "award_tier": "Participant", "callsign": "Unknown"}
+        return {
+            "unique_addresses": 0,
+            "award_tier": "Participant",
+            "callsign": "Unknown",
+        }
 
     records = adif_io.read_from_string(file_content)
     callsigns = [record.get("call", "") for record in records]
@@ -41,5 +46,5 @@ def parse_adif(file_content):
     return {
         "unique_addresses": unique_addresses,
         "award_tier": award_tier,
-        "callsign": callsign
+        "callsign": callsign,
     }

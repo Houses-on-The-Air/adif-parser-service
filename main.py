@@ -5,6 +5,7 @@ This module defines a FastAPI application for parsing ADIF files and extracting
 callsign data. The application provides endpoints for uploading and processing
 ADIF files, checking service health, and displaying welcome information.
 """
+
 try:
     from fastapi import FastAPI, File, UploadFile, HTTPException
     from fastapi.responses import JSONResponse
@@ -12,14 +13,19 @@ except ImportError:
     # Mock for testing when fastapi is not available
     class MockClass:
         """Mock class for testing when FastAPI is not available."""
+
         def __init__(self, *args, **kwargs):
             pass
+
         def __call__(self, *args, **kwargs):
             return self
+
         def get(self, *args, **kwargs):
             return self
+
         def post(self, *args, **kwargs):
             return self
+
     FastAPI = File = UploadFile = HTTPException = MockClass
     JSONResponse = MockClass
 
@@ -28,7 +34,7 @@ from adif_parser import parse_adif
 app = FastAPI(
     title="ADIF Parser Service",
     description="Service to parse ADIF files and extract callsign data",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 
@@ -42,7 +48,7 @@ def read_root():
     """
     return {
         "message": "Welcome to the ADIF service. Visit /docs for the API documentation.",
-        "status": "healthy"
+        "status": "healthy",
     }
 
 
@@ -75,10 +81,9 @@ async def upload_adif(file: UploadFile = File(...)):
         if not file:
             raise HTTPException(status_code=400, detail="No file provided")
 
-        if not file.filename.lower().endswith(('.adi', '.adif')):
+        if not file.filename.lower().endswith((".adi", ".adif")):
             raise HTTPException(
-                status_code=400,
-                detail="File must be an ADIF file (.adi or .adif)"
+                status_code=400, detail="File must be an ADIF file (.adi or .adif)"
             )
 
         content = await file.read()
@@ -87,7 +92,7 @@ async def upload_adif(file: UploadFile = File(...)):
         except UnicodeDecodeError as exc:
             raise HTTPException(
                 status_code=400,
-                detail="File encoding is not supported. Please provide a UTF-8 encoded file"
+                detail="File encoding is not supported. Please provide a UTF-8 encoded file",
             ) from exc
 
         result = parse_adif(file_content)
@@ -97,5 +102,5 @@ async def upload_adif(file: UploadFile = File(...)):
     except Exception as exc:
         raise HTTPException(
             status_code=500,
-            detail=f"An error occurred while processing the file: {str(exc)}"
+            detail=f"An error occurred while processing the file: {str(exc)}",
         ) from exc
