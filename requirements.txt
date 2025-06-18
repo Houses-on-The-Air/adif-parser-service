@@ -1,6 +1,6 @@
 fastapi==0.115.12
 uvicorn==0.34.3
 adif_io
-pytest==8.4.0
+pytest==8.4.1
 httpx==0.28.1
 pytest-cov==6.2.0
