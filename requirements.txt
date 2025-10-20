@@ -1,5 +1,5 @@
 fastapi==0.118.2
-uvicorn==0.37.0
+uvicorn==0.38.0
 adif_io
 pytest==8.4.2
 httpx==0.28.1
