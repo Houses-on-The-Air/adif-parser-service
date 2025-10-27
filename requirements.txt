@@ -1,4 +1,4 @@
-fastapi==0.118.2
+fastapi==0.120.1
 uvicorn==0.37.0
 adif_io
 pytest==8.4.2
